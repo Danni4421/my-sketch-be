@@ -147,6 +147,24 @@ app.delete('/api/scenes/:key', optionalAuth(), async (c) => {
   return c.json({ success: true })
 })
 
+// Library routes - per-user library storage in USERS KV
+app.get('/api/library', authMiddleware, async (c) => {
+  const env = c.env as Env
+  const user = c.get('user')
+  const key = `library/${user.sub}.json`
+  const data = await env.USERS.get(key, 'json')
+  return c.json({ libraryItems: data ?? [] })
+})
+
+app.put('/api/library', authMiddleware, async (c) => {
+  const env = c.env as Env
+  const user = c.get('user')
+  const body = await c.req.json<{ libraryItems: unknown[] }>()
+  const key = `library/${user.sub}.json`
+  await env.USERS.put(key, JSON.stringify(body.libraryItems ?? []))
+  return c.json({ success: true })
+})
+
 const port = 8787
 if (typeof Bun !== 'undefined') {
   console.log(`Server running on http://localhost:${port}`)
