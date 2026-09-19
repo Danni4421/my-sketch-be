@@ -9,3 +9,7 @@ routes = [
 [[kv_namespaces]]
 binding = "SCENES"
 id = "ee10477095cf41aa87d97c22ed4c8e8e"
+
+[[kv_namespaces]]
+binding = "USERS"
+id = "bf5c0bfd7b3b4fa5b34d2aac503819dc"
